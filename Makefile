@@ -217,11 +217,9 @@ pseudoxml:
 
 
 
-SOLIDITY_LEXER = solidity.py
 CO2_LEXER = co2.py
 ECLIPSE_STYLE = eclipse.py
 
-SOLIDITY_LEXER_URL = https://gitlab.com/natzei/pygments-lexer-solidity/raw/master/pygments_lexer_solidity/lexer.py
 CO2_LEXER_URL = https://raw.githubusercontent.com/natzei/co2-pygments/master/co2.py
 ECLIPSE_STYLE_URL = https://raw.githubusercontent.com/balzac-lang/balzac-doc/master/lexers/eclipse.py
 
@@ -230,12 +228,11 @@ LEXERS_DIR=pygments/lexers
 STYLES_DIR=pygments/styles
 
 #all lexers
-LEXERS = $(SOLIDITY_LEXER) $(CO2_LEXER)
+LEXERS = $(CO2_LEXER)
 STYLES = $(ECLIPSE_STYLE)
 
 .PHONY: update
 update-lexers:
-	wget $(SOLIDITY_LEXER_URL) -O $(SOLIDITY_LEXER) && \
 	wget $(CO2_LEXER_URL) -O $(CO2_LEXER) && \
 	wget $(ECLIPSE_STYLE_URL) -O $(ECLIPSE_STYLE) && \
 	ls -l $(LEXERS) $(STYLES)
