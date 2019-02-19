@@ -234,7 +234,7 @@ LEXERS = $(SOLIDITY_LEXER) $(CO2_LEXER)
 STYLES = $(ECLIPSE_STYLE)
 
 .PHONY: update
-update:
+update-lexers:
 	wget $(SOLIDITY_LEXER_URL) -O $(SOLIDITY_LEXER) && \
 	wget $(CO2_LEXER_URL) -O $(CO2_LEXER) && \
 	wget $(ECLIPSE_STYLE_URL) -O $(ECLIPSE_STYLE) && \
@@ -317,5 +317,5 @@ full-clean:
 
 .PHONY: full-build
 full-build:
-	make install-lexers && make build-doc
+	make update-lexers && make install-lexers && make build-doc
 
