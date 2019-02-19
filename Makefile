@@ -230,12 +230,13 @@ STYLES_DIR=pygments/styles
 #all lexers
 LEXERS = $(CO2_LEXER)
 STYLES = $(ECLIPSE_STYLE)
+PROJECT_LEXERS_DIR = lexers
 
 .PHONY: update
 update-lexers:
-	wget $(CO2_LEXER_URL) -O $(CO2_LEXER) && \
-	wget $(ECLIPSE_STYLE_URL) -O $(ECLIPSE_STYLE) && \
-	ls -l $(LEXERS) $(STYLES)
+	wget $(CO2_LEXER_URL) -O $(PROJECT_LEXERS_DIR)/$(CO2_LEXER) && \
+	wget $(ECLIPSE_STYLE_URL) -O $(PROJECT_LEXERS_DIR)/$(ECLIPSE_STYLE) && \
+	ls -l $(PROJECT_LEXERS_DIR)/
 
 .PHONY: install-lexers
 install-lexers:
@@ -247,7 +248,7 @@ install-lexers:
 		if [ -d $$LEXERS_DIR ]; then \
 			for LEXER in $(LEXERS); do\
 				echo "Installing $$LEXER in $$LEXERS_DIR"; \
-				sudo cp $$LEXER $$LEXERS_DIR; \
+				sudo cp $(PROJECT_LEXERS_DIR)/$$LEXER $$LEXERS_DIR; \
 			done; \
 			cd $$LEXERS_DIR; \
 			sudo python _mapping.py; \
@@ -256,7 +257,7 @@ install-lexers:
 		if [ -d $$STYLES_DIR ]; then \
 			for STYLE in $(STYLES); do\
 				echo "Installing $$STYLE in $$STYLES_DIR"; \
-				sudo cp $$STYLE $$STYLES_DIR; \
+				sudo cp $(PROJECT_LEXERS_DIR)/$$STYLE $$STYLES_DIR; \
 			done; \
 		fi \
 	done;
