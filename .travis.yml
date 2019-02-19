@@ -1,0 +1,26 @@
+language: python
+python:
+  - "2.7"
+  - "3.6"
+
+sudo: required
+
+cache:
+  directories:
+  - $HOME/.m2
+
+install:
+  - sudo apt-get -qq update
+
+before_script:
+  - pip install sphinx pygments sphinxcontrib-inlinesyntaxhighlight
+
+script:
+  - make update-lexers install-lexers build-doc-warning
+
+notifications:
+  email:
+    recipients:
+      - atzeinicola@gmail.com
+    on_success: change # default: change
+    on_failure: always # default: always
