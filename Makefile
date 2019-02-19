@@ -234,6 +234,7 @@ PROJECT_LEXERS_DIR = lexers
 
 .PHONY: update
 update-lexers:
+	mkdir -p lexers && \
 	wget $(CO2_LEXER_URL) -O $(PROJECT_LEXERS_DIR)/$(CO2_LEXER) && \
 	wget $(ECLIPSE_STYLE_URL) -O $(PROJECT_LEXERS_DIR)/$(ECLIPSE_STYLE) && \
 	ls -l $(PROJECT_LEXERS_DIR)/
