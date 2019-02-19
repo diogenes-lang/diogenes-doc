@@ -273,7 +273,7 @@ remove-lexers:
 		echo $$STYLES_DIR; \
 		if [ -d $$LEXERS_DIR ]; then \
 			for LEXER in $(LEXERS); do\
-				echo "Removing $$LEXER in $$LEXERS_DIR"; \
+				echo "Removing $$LEXER from $$LEXERS_DIR"; \
 				sudo rm -f $$LEXERS_DIR/$$LEXER; \
 			done; \
 			cd $$LEXERS_DIR; \
@@ -282,7 +282,7 @@ remove-lexers:
 		fi; \
 		if [ -d $$STYLES_DIR ]; then \
 			for STYLE in $(STYLES); do\
-				echo "Installing $$STYLE in $$STYLES_DIR"; \
+				echo "Removing $$STYLE from $$STYLES_DIR"; \
 				sudo rm -f $$STYLES_DIR/$$STYLE; \
 			done; \
 		fi \
