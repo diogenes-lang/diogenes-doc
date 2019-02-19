@@ -238,7 +238,7 @@ update-lexers:
 	ls -l $(LEXERS) $(STYLES)
 
 .PHONY: install-lexers
-install-lexers: remove-lexers
+install-lexers:
 	for PY_SITE in $(PY_SITES); do \
 		LEXERS_DIR=$$PY_SITE/$(LEXERS_DIR); \
 		STYLES_DIR=$$PY_SITE/$(STYLES_DIR); \
