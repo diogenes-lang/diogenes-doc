@@ -3,9 +3,7 @@
 
 ## Requirements
 
-The documentation is generated in Python (both version 2 and 3 are tested with Travis CI).
-
-Use `pip` to install the following Python packages:
+The documentation is generated with [Sphinx](http://sphinx-doc.org). Use `pip` to install the dependencies:
 
 ```
 pip install sphinx pygments sphinxcontrib-inlinesyntaxhighlight
@@ -13,8 +11,8 @@ pip install sphinx pygments sphinxcontrib-inlinesyntaxhighlight
 
 ## Available commands
 
+Run `make` to list the available commands:
 ```shell
-$ make
 Please use `make <target>' where <target> is one of
   build                to build the documentation
   clean                to clean the documentation
@@ -23,7 +21,7 @@ Please use `make <target>' where <target> is one of
   remove-lexer         to remove the lexer and the style
   full-build           to install the lexer and build the documentation
   full-clean           to remove the lexer and clean the documentation
-  loop                 to start a loop that search for changes and rebuild the documentation if there are any
+  loop                 to rebuild the documentation on changes
   server               to start an http server using Python 3
   server2              to start an http server using Python 2
 
