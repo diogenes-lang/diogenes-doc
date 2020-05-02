@@ -1,5 +1,3 @@
 build
 
-co2.py
-eclipse.py
-solidity.py
+co2_lexer_and_style.egg-info

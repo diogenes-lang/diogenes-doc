@@ -216,89 +216,53 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 
-
-CO2_LEXER = co2.py
-ECLIPSE_STYLE = eclipse.py
-
-CO2_LEXER_URL = https://raw.githubusercontent.com/natzei/co2-pygments/master/co2.py
-ECLIPSE_STYLE_URL = https://raw.githubusercontent.com/balzac-lang/balzac-doc/master/lexers/eclipse.py
-
-PY_SITES=`pip show pygments | grep Location | cut -f2 -d\ `
-LEXERS_DIR=pygments/lexers
-STYLES_DIR=pygments/styles
-
-#all lexers
-LEXERS = $(CO2_LEXER)
-STYLES = $(ECLIPSE_STYLE)
-PROJECT_LEXERS_DIR = lexers
-
-.PHONY: update
-update-lexers:
-	mkdir -p lexers && \
-	wget $(CO2_LEXER_URL) -O $(PROJECT_LEXERS_DIR)/$(CO2_LEXER) && \
-	wget $(ECLIPSE_STYLE_URL) -O $(PROJECT_LEXERS_DIR)/$(ECLIPSE_STYLE) && \
-	ls -l $(PROJECT_LEXERS_DIR)/
-
-.PHONY: install-lexers
-install-lexers:
-	for PY_SITE in $(PY_SITES); do \
-		LEXERS_DIR=$$PY_SITE/$(LEXERS_DIR); \
-		STYLES_DIR=$$PY_SITE/$(STYLES_DIR); \
-		echo $$LEXERS_DIR; \
-		echo $$STYLES_DIR; \
-		if [ -d $$LEXERS_DIR ]; then \
-			for LEXER in $(LEXERS); do\
-				echo "Installing $$LEXER in $$LEXERS_DIR"; \
-				sudo cp $(PROJECT_LEXERS_DIR)/$$LEXER $$LEXERS_DIR; \
-			done; \
-			cd $$LEXERS_DIR; \
-			sudo python _mapping.py; \
-			cd $$OLDPWD; \
-		fi; \
-		if [ -d $$STYLES_DIR ]; then \
-			for STYLE in $(STYLES); do\
-				echo "Installing $$STYLE in $$STYLES_DIR"; \
-				sudo cp $(PROJECT_LEXERS_DIR)/$$STYLE $$STYLES_DIR; \
-			done; \
-		fi \
-	done;
-
-.PHONY: remove-lexers
-remove-lexers:
-	for PY_SITE in $(PY_SITES); do \
-		LEXERS_DIR=$$PY_SITE/$(LEXERS_DIR); \
-		STYLES_DIR=$$PY_SITE/$(STYLES_DIR); \
-		echo $$LEXERS_DIR; \
-		echo $$STYLES_DIR; \
-		if [ -d $$LEXERS_DIR ]; then \
-			for LEXER in $(LEXERS); do\
-				echo "Removing $$LEXER from $$LEXERS_DIR"; \
-				sudo rm -f $$LEXERS_DIR/$$LEXER; \
-			done; \
-			cd $$LEXERS_DIR; \
-			sudo python _mapping.py; \
-			cd $$OLDPWD; \
-		fi; \
-		if [ -d $$STYLES_DIR ]; then \
-			for STYLE in $(STYLES); do\
-				echo "Removing $$STYLE from $$STYLES_DIR"; \
-				sudo rm -f $$STYLES_DIR/$$STYLE; \
-			done; \
-		fi \
-	done;
-
+## 
 .PHONY: build-doc
-build-doc:
+build:
 	make html
 
 .PHONY: build-doc-warning
-build-doc-warning:
+build-fatal-warning:
 	$(SPHINXBUILD) -W -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 
-## Clean the documentation
-.PHONY: clean-doc
-clean-doc:
-	make clean
+
+.PHONY: install-lexer
+install-lexer:
+	LEXER_NAME=co2.py; \
+	LEXER_FILE=lexers/$$LEXER_NAME; \
+	STYLE_NAME=eclipse.py; \
+	STYLE_FILE=lexers/balzaclexer/$$STYLE_NAME; \
+	PY_SITES=`pip show pygments | grep Location | cut -f2 -d\ `; \
+	for s in $$PY_SITES; do \
+		LEXERS_DIR=$$s/pygments/lexers; \
+		STYLES_DIR=$$s/pygments/styles; \
+		echo $$LEXERS_DIR; \
+		if [ -d $$LEXERS_DIR ]; then \
+			echo "Installing $$LEXER_NAME..."; \
+			cd lexers; \
+			sudo python setup.py develop; \
+			sudo pip install Balzac-lexer-and-style; \
+			cd $$OLDPWD; \
+		fi; \
+	done
+
+.PHONY: remove-lexer
+remove-lexer:
+	LEXER_NAME=co2.py; \
+	STYLE_NAME=eclipse.py; \
+	PY_SITES=`pip show pygments | grep Location | cut -f2 -d\ `; \
+	for s in $$PY_SITES; do \
+		LEXERS_DIR=$$s/pygments/lexers; \
+		STYLES_DIR=$$s/pygments/styles; \
+		echo $$LEXERS_DIR; \
+		if [ -d $$LEXERS_DIR ]; then \
+			echo "Removing $$LEXER_NAME..."; \
+			cd lexers; \
+			sudo python setup.py develop --uninstall; \
+			sudo pip uninstall Balzac-lexer-and-style; \
+			cd $$OLDPWD; \
+		fi; \
+	done
 
 .PHONY: loop
 loop:
@@ -307,14 +271,11 @@ loop:
 .PHONY: server
 server:
 	cd build/html/ && \
-	/usr/bin/env python2 -m SimpleHTTPServer 8000 && \
+	/usr/bin/env python3 -m http.server 8000 && \
 	cd ..
 
-.PHONY: full-clean
-full-clean:
-	make clean-doc && make remove-lexers
-
-.PHONY: full-build
-full-build:
-	make update-lexers && make install-lexers && make build-doc
-
+.PHONY: server2
+server2:
+	cd build/html/ && \
+	/usr/bin/env python2 -m SimpleHTTPServer 8000 && \
+	cd ..
