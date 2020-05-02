@@ -279,3 +279,7 @@ server2:
 	cd build/html/ && \
 	/usr/bin/env python2 -m SimpleHTTPServer 8000 && \
 	cd ..
+
+.PHONY: full-build
+full-build:
+	make install-lexer && make build-doc
