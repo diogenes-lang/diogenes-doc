@@ -22,29 +22,41 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 .PHONY: help
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
-	@echo "  html	   to make standalone HTML files"
-	@echo "  dirhtml	to make HTML files named index.html in directories"
+	@echo "  build                to build the documentation"
+	@echo "  clean                to clean the documentation"
+	@echo "  build-fatal-warnings to build the documentation and fail if there are warnings"
+	@echo "  install-lexer        to install the lexer and the style"
+	@echo "  remove-lexer         to remove the lexer and the style"
+	@echo "  full-build           to install the lexer and build the documentation"
+	@echo "  full-clean           to remove the lexer and clean the documentation"
+	@echo "  loop                 to start a loop that search for changes and rebuild the documentation if there are any"
+	@echo "  server               to start an http server using Python 3"
+	@echo "  server2              to start an http server using Python 2"
+	@echo
+	@echo " Other commands"
+	@echo "  html       to make standalone HTML files"
+	@echo "  dirhtml    to make HTML files named index.html in directories"
 	@echo "  singlehtml to make a single large HTML file"
-	@echo "  pickle	 to make pickle files"
-	@echo "  json	   to make JSON files"
+	@echo "  pickle     to make pickle files"
+	@echo "  json       to make JSON files"
 	@echo "  htmlhelp   to make HTML files and a HTML help project"
-	@echo "  qthelp	 to make HTML files and a qthelp project"
+	@echo "  qthelp     to make HTML files and a qthelp project"
 	@echo "  applehelp  to make an Apple Help Book"
-	@echo "  devhelp	to make HTML files and a Devhelp project"
-	@echo "  epub	   to make an epub"
-	@echo "  latex	  to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
+	@echo "  devhelp    to make HTML files and a Devhelp project"
+	@echo "  epub       to make an epub"
+	@echo "  latex      to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
 	@echo "  latexpdf   to make LaTeX files and run them through pdflatex"
 	@echo "  latexpdfja to make LaTeX files and run them through platex/dvipdfmx"
-	@echo "  text	   to make text files"
-	@echo "  man		to make manual pages"
-	@echo "  texinfo	to make Texinfo files"
-	@echo "  info	   to make Texinfo files and run them through makeinfo"
-	@echo "  gettext	to make PO message catalogs"
-	@echo "  changes	to make an overview of all changed/added/deprecated items"
-	@echo "  xml		to make Docutils-native XML files"
+	@echo "  text       to make text files"
+	@echo "  man        to make manual pages"
+	@echo "  texinfo    to make Texinfo files"
+	@echo "  info       to make Texinfo files and run them through makeinfo"
+	@echo "  gettext    to make PO message catalogs"
+	@echo "  changes    to make an overview of all changed/added/deprecated items"
+	@echo "  xml        to make Docutils-native XML files"
 	@echo "  pseudoxml  to make pseudoxml-XML files for display purposes"
 	@echo "  linkcheck  to check all external links for integrity"
-	@echo "  doctest	to run all doctests embedded in the documentation (if enabled)"
+	@echo "  doctest    to run all doctests embedded in the documentation (if enabled)"
 	@echo "  coverage   to run coverage check of the documentation (if enabled)"
 
 .PHONY: clean
@@ -216,70 +228,59 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 
-## 
-.PHONY: build-doc
+## Build the documentation
+.PHONY: build
 build:
 	make html
 
-.PHONY: build-doc-warning
-build-fatal-warning:
+## Build the documentation and fail if there are warnings
+.PHONY: build-fatal-warnings
+build-fatal-warnings:
 	$(SPHINXBUILD) -W -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 
-
+## Install the lexer and the style
 .PHONY: install-lexer
 install-lexer:
-	LEXER_NAME=co2.py; \
-	LEXER_FILE=lexers/$$LEXER_NAME; \
-	STYLE_NAME=eclipse.py; \
-	STYLE_FILE=lexers/balzaclexer/$$STYLE_NAME; \
-	PY_SITES=`pip show pygments | grep Location | cut -f2 -d\ `; \
-	for s in $$PY_SITES; do \
-		LEXERS_DIR=$$s/pygments/lexers; \
-		STYLES_DIR=$$s/pygments/styles; \
-		echo $$LEXERS_DIR; \
-		if [ -d $$LEXERS_DIR ]; then \
-			echo "Installing $$LEXER_NAME..."; \
-			cd lexers; \
-			sudo python setup.py develop; \
-			sudo pip install Balzac-lexer-and-style; \
-			cd $$OLDPWD; \
-		fi; \
-	done
+	@echo "Installing lexer..."; \
+	cd lexers; \
+	sudo python setup.py develop; \
+	sudo pip install co2-lexer-and-style; \
+	cd $$OLDPWD
 
+## Remove the lexer and the style
 .PHONY: remove-lexer
 remove-lexer:
-	LEXER_NAME=co2.py; \
-	STYLE_NAME=eclipse.py; \
-	PY_SITES=`pip show pygments | grep Location | cut -f2 -d\ `; \
-	for s in $$PY_SITES; do \
-		LEXERS_DIR=$$s/pygments/lexers; \
-		STYLES_DIR=$$s/pygments/styles; \
-		echo $$LEXERS_DIR; \
-		if [ -d $$LEXERS_DIR ]; then \
-			echo "Removing $$LEXER_NAME..."; \
-			cd lexers; \
-			sudo python setup.py develop --uninstall; \
-			sudo pip uninstall Balzac-lexer-and-style; \
-			cd $$OLDPWD; \
-		fi; \
-	done
+	@echo "Removing lexer..."; \
+	cd lexers; \
+	sudo python setup.py develop --uninstall; \
+	sudo pip uninstall co2-lexer-and-style; \
+	cd $$OLDPWD
 
+## Start a loop that search for changes and rebuild the documentation if there are any
 .PHONY: loop
 loop:
 	./ifchanged.py source 'make build-doc'
 
+## Start an http server using Python 3
 .PHONY: server
 server:
 	cd build/html/ && \
 	/usr/bin/env python3 -m http.server 8000 && \
 	cd ..
 
+## Start an http server using Python 2
 .PHONY: server2
 server2:
 	cd build/html/ && \
 	/usr/bin/env python2 -m SimpleHTTPServer 8000 && \
 	cd ..
 
+## Install the lexer and build the documentation
 .PHONY: full-build
 full-build:
-	make install-lexer && make build-doc
+	make install-lexer && make build
+
+## Remove the lexer and clean the documentation
+.PHONY: full-clean
+full-clean:
+	make remove-lexer && make clean
