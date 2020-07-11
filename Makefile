@@ -29,7 +29,7 @@ help:
 	@echo "  remove-lexer         to remove the lexer and the style"
 	@echo "  full-build           to install the lexer and build the documentation"
 	@echo "  full-clean           to remove the lexer and clean the documentation"
-	@echo "  loop                 to start a loop that search for changes and rebuild the documentation if there are any"
+	@echo "  loop                 to rebuild the documentation on changes"
 	@echo "  server               to start an http server using Python 3"
 	@echo "  server2              to start an http server using Python 2"
 	@echo
