@@ -1,5 +1,5 @@
 # Diogenes Documentation
-[![Build Status](https://travis-ci.org/diogenes-lang/diogenes-doc.svg?branch=master)](https://travis-ci.org/diogenes-lang/diogenes-doc)
+[![Build and Release](https://github.com/diogenes-lang/diogenes-doc/actions/workflows/python-app.yml/badge.svg)](https://github.com/diogenes-lang/diogenes-doc/actions/workflows/python-app.yml)
 
 ## Requirements
 
