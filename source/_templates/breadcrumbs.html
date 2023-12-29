@@ -1,0 +1,17 @@
+{% extends "!breadcrumbs.html" %}
+
+{% set display_github = True %}
+{% set github_user = 'diogenes-lang' %}
+{% set github_repo = 'diogenes-doc' %}
+{% set github_version = 'master/' %}
+{% set conf_py_path = 'source/' %}
+
+{% block breadcrumbs_aside %}
+  <li class="wy-breadcrumbs-aside">
+    {% if pagename != "search" %}
+      {% if display_github %}
+        <a target="_blank" href="https://{{ github_host|default("github.com") }}/{{ github_user }}/{{ github_repo }}/blob/{{ github_version }}{{ conf_py_path }}{{ pagename }}{{ page_source_suffix }}" class="fa fa-github"> {{ _('Edit on GitHub') }}</a>
+      {% endif %}
+    {% endif %}
+  </li>
+{% endblock %}
